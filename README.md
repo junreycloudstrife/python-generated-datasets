@@ -1,2 +1,2 @@
 # python-generated-datasets
-Generated Datasets using Python with Panda
+Generated Datasets using Python with Faker and Panda
