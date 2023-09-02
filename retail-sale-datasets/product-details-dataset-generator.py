@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 from faker import Faker
 from faker.providers import DynamicProvider
 
@@ -15,19 +16,19 @@ fake = Faker()
 
 fake.add_provider(product_details_provider)
 
-num_products = 500  # Adjust as needed
+num_products = 10000  # Adjust as needed
 
 products = []
 
 for _ in range(num_products):
-    product_id = f'PROD{"{:05d}".format(_)}'            # Added leading zeros
-    product_detail = fake.product_detail()              # Store the random product detail
-    product_name = product_detail['product name']       # Get the product name
-    category = product_detail['category']               # Get the category
-    subcategory = product_detail['subcategory']         # Get the subcategory
-    manufacturer = fake.company()                       # Generate fake company name
-    unit_cost = product_detail['unit price']            # Get the unit price
+    product_id = f'PROD{"{:05d}".format(_)}'                                    # Added leading zeros
+    product_detail = fake.product_detail()                                      # Store the random product detail
+    product_name = product_detail['product name']                               # Get the product name
+    category = product_detail['category']                                       # Get the category
+    subcategory = product_detail['subcategory']                                 # Get the subcategory
+    manufacturer = fake.company()                                               # Generate fake company name
+    unit_cost = float(product_detail['unit price']) + random.randint(0, 20)     # Get random unit price
     products.append([product_id, product_name, category, subcategory, manufacturer, unit_cost])
 
-products_df = pd.DataFrame(products, columns=['Product ID', 'Product Name', 'Category', 'Subcategory', 'Manufacturer', 'Unit Cost'])
+products_df = pd.DataFrame(products, columns=['ProductID', 'ProductName', 'Category', 'Subcategory', 'Manufacturer', 'UnitCost'])
 products_df.to_csv('product_details.csv', index=False)
