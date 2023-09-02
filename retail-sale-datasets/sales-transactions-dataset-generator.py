@@ -20,7 +20,7 @@ transactions = []
 
 for _ in range(num_transactions):
     transaction_id = _ + 1                                                  # Generate transaction ID
-    date += datetime.timedelta(days=random.randint(0, 5))                   # Generate date that increase
+    date += datetime.timedelta(hours=random.randint(12, 24))                   # Generate date that increase
     customer_id = fake.random_element(customers_df.CustomerID.tolist())     # Get random customer ID
     product_id = fake.random_element(products_df1.ProductID.tolist())       # Get random product ID
     quantity_sold = random.randint(1, 10)                                   # Generate random number of items
