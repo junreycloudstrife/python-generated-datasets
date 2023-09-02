@@ -2,19 +2,31 @@ import pandas as pd
 import random
 from faker import Faker
 
+import gender_guesser.detector as gender
+
 fake = Faker()
 
-num_customers = 500  # Adjust as needed
+gender_type = gender.Detector()
+
+num_customers = 100  # Adjust as needed
 
 customers = []
 
 for _ in range(num_customers):
-    customer_id = f'CUST{"{:05d}".format(_)}' # Added leading zeros
+    customer_id = f'CUST{"{:05d}".format(_)}'                           # Added leading zeros
+    name = fake.unique.name()
     age = random.randint(18, 70)
-    gender = fake.random_element(['Male', 'Female'])
+    gender = gender_type.get_gender(name.split()[0]).capitalize()       # Get the gender of first name at index 0
+    if gender == 'Unknown':                                             # Leading title like Dr., Mrs, etc
+        gender = gender_type.get_gender(name.split()[1]).capitalize()   # Get the gender of first name at index 1
+
+    if gender == 'Mostly_female':                                       # If returns 'Mostly_female
+        gender = 'Female'                                               # Set to 'Female'
+    elif gender == 'Mostly_male':                                       # If returns 'Mostly_male
+        gender = 'Male'                                                 # Set to 'Male'
     location = fake.city()
     membership_type = fake.random_element(['Silver', 'Gold', 'Platinum'])
-    customers.append([customer_id, age, gender, location, membership_type])
+    customers.append([customer_id, name, age, gender, location, membership_type])
 
-customers_df = pd.DataFrame(customers, columns=['Customer ID', 'Age', 'Gender', 'Location', 'Membership Type'])
+customers_df = pd.DataFrame(customers, columns=['Customer ID', 'Name', 'Age', 'Gender', 'Location', 'Membership Type'])
 customers_df.to_csv('customer_demographics.csv', index=False)
