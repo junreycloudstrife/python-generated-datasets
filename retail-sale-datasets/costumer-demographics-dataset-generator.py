@@ -1,14 +1,16 @@
 import pandas as pd
 import random
 from faker import Faker
-
 import gender_guesser.detector as gender
+from costumer_demographics import Locations
 
 fake = Faker()
 
 gender_type = gender.Detector()
 
-num_customers = 100  # Adjust as needed
+locations = Locations
+
+num_customers = 10000  # Adjust as needed
 
 customers = []
 
@@ -24,7 +26,8 @@ for _ in range(num_customers):
         gender = 'Female'                                               # Set to 'Female'
     elif gender == 'Mostly_male':                                       # If returns 'Mostly_male
         gender = 'Male'                                                 # Set to 'Male'
-    location = fake.city()                                              # Generate a fake city
+    # location = fake.city()                                              # Generate a fake city
+    location = fake.random_element(locations)
     membership_type = fake.random_element(['Silver', 'Gold', 'Platinum'])
     customers.append([customer_id, name, age, gender, location, membership_type])
 
